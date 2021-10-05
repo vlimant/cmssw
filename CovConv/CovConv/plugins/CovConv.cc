@@ -112,9 +112,18 @@ void CovConv::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
   auto& pfcands = iEvent.get(PfToken_);
   auto& pf2packed = iEvent.get(pf2pToken_);
   
+  uint pfs=0;
+  uint no_pf_track=0;
+  uint no_packed=0;
+  uint no_packed_track=0;
+  pfs = pfcands.size();
   for (size_t i = 0 ; i < pfcands.size(); i++){
     auto pfcand = pfcands.refAt(i);
-    if (!pfcand->trackRef()) continue;
+    if (!pfcand->trackRef()){
+      //std::cout<<"a PF candidate with no track associated"<<std:endl;
+      no_pf_track++;
+      continue;
+    }
     //qoverp, lambda, phi, dxy, dsz
     const reco::TrackBase::ParameterVector & par = pfcand->trackRef()->parameters();
     const reco::TrackBase::CovarianceMatrix & cov = pfcand->trackRef()->covariance();
@@ -122,11 +131,13 @@ void CovConv::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
     //find the matching packed candidate, so that we have a handle on the packed covariance matrix
     auto packed = pf2packed[pfcand];
     if (!packed) {
-      std::cout<<"missing associated packed candidate"<<std::endl;
+      no_packed++;
+      //std::cout<<"missing associated packed candidate"<<std::endl;
       continue;
     }
     if (!packed->hasTrackDetails()){
-      std::cout<<"a pf candidate, with an associated packed candidate, that does not have track details!"<<std::endl;
+      //std::cout<<"a pf candidate, with an associated packed candidate, that does not have track details!"<<std::endl;
+      no_packed_track++;
       continue;
     }
     auto pTrack = packed->pseudoTrack();
@@ -141,7 +152,12 @@ void CovConv::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
     //std::cout<<"filling one pf-packed pair"<<std::endl;
     covTree_->Fill();
   }
-
+  
+  std::cout<<pfs<<" PF, "
+	   <<no_pf_track<<" without tracks, "
+	   <<no_packed<<" not associated with packed, "
+	   <<no_packed_track<<" with no packed track details"
+	   <<std::endl;
 }
 
 // ------------ method called once each job just before starting event loop  ------------
