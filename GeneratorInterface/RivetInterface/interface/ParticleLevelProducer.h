@@ -20,6 +20,7 @@ public:
   ParticleLevelProducer(const edm::ParameterSet& pset);
   ~ParticleLevelProducer() override {}
   void produce(edm::Event& event, const edm::EventSetup& eventSetup) override;
+  static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 private:
   void addGenJet(Rivet::Jet jet,

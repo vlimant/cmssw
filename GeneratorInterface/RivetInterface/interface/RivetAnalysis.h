@@ -47,6 +47,35 @@ namespace Rivet {
     Vector3 _met;
 
   public:
+    static edm::ParameterSetDescription getDescriptions() {
+      edm::ParameterSetDescription desc;
+      desc.add<bool>("usePromptFinalStates")->setComment("whether to use prompt final state");
+      desc.add<bool>("excludePromptLeptonsFromJetClustering")->setComment("no prompt lepton is used in jet clustering");
+      desc.add<bool>("excludeNeutrinosFromJetClustering")->setComment("no neutrino  is used in jet clustering");
+      desc.add<bool>("doJetClustering")->setComment("perform jet clustering over particles");
+
+      desc.add<double>("particleMinPt")->setComment("");
+      desc.add<double>("particleMaxEta")->setComment("");
+
+      desc.add<double>("lepConeSize")->setComment("");
+      desc.add<double>("lepMinPt")->setComment("");
+      desc.add<double>("lepMaxEta")->setComment("");
+
+      desc.add<double>("jetConeSize")->setComment("");
+      desc.add<double>("jetMinPt")->setComment("");
+      desc.add<double>("jetMaxEta")->setComment("");
+
+      desc.add<double>("fatJetConeSize")->setComment("");
+      desc.add<double>("fatJetMinPt")->setComment("");
+      desc.add<double>("fatJetMaxEta")->setComment("");
+
+      desc.add<double>("phoMinPt")->setComment("");
+      desc.add<double>("phoMaxEta")->setComment("");
+      desc.add<double>("phoIsoConeSize")->setComment("");
+      desc.add<double>("phoMaxRelIso")->setComment("");
+
+      return desc;
+    }
     RivetAnalysis(const edm::ParameterSet& pset)
         : Analysis("RivetAnalysis"),
           _usePromptFinalStates(pset.getParameter<bool>("usePromptFinalStates")),

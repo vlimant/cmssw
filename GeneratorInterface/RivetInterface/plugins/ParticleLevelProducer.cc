@@ -199,4 +199,10 @@ void ParticleLevelProducer::produce(edm::Event& event, const edm::EventSetup& ev
   event.put(std::move(mets), "mets");
 }
 
+void ParticleLevelProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  edm::ParameterSetDescription desc = Rivet::RivetAnalysis::getDescriptions();
+  desc.add<edm::InputTag>("src")->setComment("the input edm::HepMCProduct");
+  descriptions.addWithDefaultLabel(desc);
+}
+
 DEFINE_FWK_MODULE(ParticleLevelProducer);
