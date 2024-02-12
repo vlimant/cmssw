@@ -462,7 +462,7 @@ _eleVarsExtra = cms.PSet(
 tautaggerForMatching = cms.EDProducer("GenJetTauTaggerProducer",
                                       src = cms.InputTag('particleLevel:leptons')
 )
- ##PhysicsTools/NanoAOD/plugins/GenJetGenPartMerger.cc##this class misses fillDescription#TODO
+
 matchingElecPhoton = cms.EDProducer("GenJetGenPartMerger",
                                     srcJet =cms.InputTag("particleLevel:leptons"),
                                     srcPart=cms.InputTag("particleLevel:photons"),
