@@ -68,8 +68,10 @@ void GenJetTauTaggerProducer::produce(edm::Event& iEvent, const edm::EventSetup&
   for (auto jet = jets->begin(); jet != jets->end(); ++jet) {
     bool found = false;
     for (auto cand : jet->getJetConstituentsQuick()) {
-      if (abs(cand->pdgId()) == 15)
+      if (abs(cand->pdgId()) == 15) {
         found = true;
+        break;
+      }
     }
     tags.push_back(found);
   }
