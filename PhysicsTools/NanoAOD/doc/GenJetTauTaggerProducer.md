@@ -1,0 +1,1 @@
+The `GenJetTauTaggerProducer` module reads the collection of `reco::GenJet` with name __src__ and produces the corresponding valuemap of boolean if one of the jet constituents has PDGId +/-15.
