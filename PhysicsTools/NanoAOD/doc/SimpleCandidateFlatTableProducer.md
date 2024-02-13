@@ -1,3 +1,3 @@
-The `SimpleCandidateFlatTableProducer` module allows to transfer feeatures of any collection (named __src__) of object deriving from `reco::Candidate` into a `nano::FlatTable` named __name__, with __doc__ as documentation, as an __extension__ or not. Objects are selected using the __cut__ expression.
+The `SimpleCandidateFlatTableProducer` module allows to transfer feeatures of any collection, with label __src__ of object deriving from `reco::Candidate` into a `nano::FlatTable` named __name__, with __doc__ as documentation, as an __extension__ or not. Objects are selected using the __cut__ expression.
 
 The parameter set called "variables" define a function __expr__ to evaluate on the object to fill the branch, the __precision__ with wich it should be stored.
