@@ -14,55 +14,55 @@ using namespace std;
 using namespace edm;
 
 TransientTrack TransientTrackBuilder::build(const Track* t) const {
-  return TransientTrack(*t, theField, theTrackingGeometry);
+  return TransientTrack(*t, field(), theTrackingGeometry);
 }
 
 TransientTrack TransientTrackBuilder::build(const Track& t) const {
-  return TransientTrack(t, theField, theTrackingGeometry);
+  return TransientTrack(t, field(), theTrackingGeometry);
 }
 
 TransientTrack TransientTrackBuilder::build(const GsfTrack* t) const {
-  return TransientTrack(new GsfTransientTrack(*t, theField, theTrackingGeometry));
+  return TransientTrack(new GsfTransientTrack(*t, field(), theTrackingGeometry));
 }
 
 TransientTrack TransientTrackBuilder::build(const GsfTrack& t) const {
-  return TransientTrack(new GsfTransientTrack(t, theField, theTrackingGeometry));
+  return TransientTrack(new GsfTransientTrack(t, field(), theTrackingGeometry));
 }
 
 TransientTrack TransientTrackBuilder::build(const CandidatePtr* t) const {
   reco::PFCandidatePtr tryPF(*t);
   edm::Ptr<pat::PackedCandidate> tryPacked(*t);
   if (tryPF.get() != nullptr && tryPF->isTimeValid()) {
-    return TransientTrack(*t, tryPF->time(), tryPF->timeError(), theField, theTrackingGeometry);
+    return TransientTrack(*t, tryPF->time(), tryPF->timeError(), field(), theTrackingGeometry);
   } else if (tryPacked.get() != nullptr && tryPacked->timeError() > 0.f) {
-    return TransientTrack(*t, (double)tryPacked->time(), (double)tryPacked->timeError(), theField, theTrackingGeometry);
+    return TransientTrack(*t, (double)tryPacked->time(), (double)tryPacked->timeError(), field(), theTrackingGeometry);
   }
-  return TransientTrack(*t, theField, theTrackingGeometry);
+  return TransientTrack(*t, field(), theTrackingGeometry);
 }
 
 TransientTrack TransientTrackBuilder::build(const CandidatePtr& t) const { return this->build(&t); }
 
 TransientTrack TransientTrackBuilder::build(const TrackRef* t) const {
-  return TransientTrack(*t, theField, theTrackingGeometry);
+  return TransientTrack(*t, field(), theTrackingGeometry);
 }
 
 TransientTrack TransientTrackBuilder::build(const TrackRef& t) const {
-  return TransientTrack(t, theField, theTrackingGeometry);
+  return TransientTrack(t, field(), theTrackingGeometry);
 }
 
 TransientTrack TransientTrackBuilder::build(const GsfTrackRef* t) const {
-  return TransientTrack(new GsfTransientTrack(*t, theField, theTrackingGeometry));
+  return TransientTrack(new GsfTransientTrack(*t, field(), theTrackingGeometry));
 }
 
 TransientTrack TransientTrackBuilder::build(const GsfTrackRef& t) const {
-  return TransientTrack(new GsfTransientTrack(t, theField, theTrackingGeometry));
+  return TransientTrack(new GsfTransientTrack(t, field(), theTrackingGeometry));
 }
 
 vector<TransientTrack> TransientTrackBuilder::build(const edm::Handle<reco::TrackCollection>& trkColl) const {
   vector<TransientTrack> ttVect;
   ttVect.reserve((*trkColl).size());
   for (unsigned int i = 0; i < (*trkColl).size(); i++) {
-    ttVect.push_back(TransientTrack(TrackRef(trkColl, i), theField, theTrackingGeometry));
+    ttVect.push_back(TransientTrack(TrackRef(trkColl, i), field(), theTrackingGeometry));
   }
   return ttVect;
 }
@@ -71,7 +71,7 @@ vector<TransientTrack> TransientTrackBuilder::build(const edm::Handle<reco::GsfT
   vector<TransientTrack> ttVect;
   ttVect.reserve((*trkColl).size());
   for (unsigned int i = 0; i < (*trkColl).size(); i++) {
-    ttVect.push_back(TransientTrack(new GsfTransientTrack(GsfTrackRef(trkColl, i), theField, theTrackingGeometry)));
+    ttVect.push_back(TransientTrack(new GsfTransientTrack(GsfTrackRef(trkColl, i), field(), theTrackingGeometry)));
   }
   return ttVect;
 }
@@ -84,9 +84,9 @@ vector<TransientTrack> TransientTrackBuilder::build(const edm::Handle<edm::View<
     const GsfTrack* gsfTrack = dynamic_cast<const GsfTrack*>(trk);
     if (gsfTrack) {
       ttVect.push_back(TransientTrack(
-          new GsfTransientTrack(RefToBase<Track>(trkColl, i).castTo<GsfTrackRef>(), theField, theTrackingGeometry)));
+          new GsfTransientTrack(RefToBase<Track>(trkColl, i).castTo<GsfTrackRef>(), field(), theTrackingGeometry)));
     } else {  // gsf
-      ttVect.push_back(TransientTrack(RefToBase<Track>(trkColl, i).castTo<TrackRef>(), theField, theTrackingGeometry));
+      ttVect.push_back(TransientTrack(RefToBase<Track>(trkColl, i).castTo<TrackRef>(), field(), theTrackingGeometry));
     }
   }
   return ttVect;
@@ -107,7 +107,7 @@ vector<TransientTrack> TransientTrackBuilder::build(const edm::Handle<reco::Trac
       time = 0.0;
       timeReso = defaultInvalidTrackTimeReso;
     }
-    ttVect.push_back(TransientTrack(ref, time, timeReso, theField, theTrackingGeometry));
+    ttVect.push_back(TransientTrack(ref, time, timeReso, field(), theTrackingGeometry));
   }
   return ttVect;
 }
@@ -127,7 +127,7 @@ vector<TransientTrack> TransientTrackBuilder::build(const edm::Handle<reco::GsfT
       time = 0.0;
       timeReso = defaultInvalidTrackTimeReso;
     }
-    ttVect.push_back(TransientTrack(new GsfTransientTrack(ref, time, timeReso, theField, theTrackingGeometry)));
+    ttVect.push_back(TransientTrack(new GsfTransientTrack(ref, time, timeReso, field(), theTrackingGeometry)));
   }
   return ttVect;
 }
@@ -151,7 +151,7 @@ vector<TransientTrack> TransientTrackBuilder::build(const edm::Handle<edm::View<
         timeReso = defaultInvalidTrackTimeReso;
       }
       ttVect.push_back(TransientTrack(new GsfTransientTrack(
-          RefToBase<Track>(trkColl, i).castTo<GsfTrackRef>(), time, timeReso, theField, theTrackingGeometry)));
+          RefToBase<Track>(trkColl, i).castTo<GsfTrackRef>(), time, timeReso, field(), theTrackingGeometry)));
     } else {  // gsf
       TrackRef ref = RefToBase<Track>(trkColl, i).castTo<TrackRef>();
       double time = trackTimes[ref];
@@ -163,7 +163,7 @@ vector<TransientTrack> TransientTrackBuilder::build(const edm::Handle<edm::View<
         timeReso = defaultInvalidTrackTimeReso;
       }
       ttVect.push_back(TransientTrack(
-          RefToBase<Track>(trkColl, i).castTo<TrackRef>(), time, timeReso, theField, theTrackingGeometry));
+          RefToBase<Track>(trkColl, i).castTo<TrackRef>(), time, timeReso, field(), theTrackingGeometry));
     }
   }
   return ttVect;

@@ -15,7 +15,7 @@
 
 class TransientTrackBuilder {
 public:
-  TransientTrackBuilder(const MagneticField* field, const edm::ESHandle<GlobalTrackingGeometry>& trackingGeometry)
+  TransientTrackBuilder(const edm::ESHandle<MagneticField>& field, const edm::ESHandle<GlobalTrackingGeometry>& trackingGeometry)
       : theField(field), theTrackingGeometry(trackingGeometry) {}
 
   reco::TransientTrack build(const reco::Track* p) const;
@@ -67,12 +67,12 @@ public:
 
   reco::TransientTrack build(const FreeTrajectoryState& fts) const;
 
-  const MagneticField* field() const { return theField; }
+  const MagneticField* field() const { return &(*theField); }
   const edm::ESHandle<GlobalTrackingGeometry> trackingGeometry() const { return theTrackingGeometry; }
   static constexpr float defaultInvalidTrackTimeReso = 0.350f;
 
 private:
-  const MagneticField* theField;
+  edm::ESHandle<MagneticField> theField;
   edm::ESHandle<GlobalTrackingGeometry> theTrackingGeometry;
 };
 

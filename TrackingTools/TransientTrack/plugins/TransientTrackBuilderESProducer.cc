@@ -17,7 +17,7 @@ TransientTrackBuilderESProducer::TransientTrackBuilderESProducer(const edm::Para
 }
 
 std::unique_ptr<TransientTrackBuilder> TransientTrackBuilderESProducer::produce(const TransientTrackRecord& iRecord) {
-  return std::make_unique<TransientTrackBuilder>(&iRecord.get(magToken_), iRecord.getHandle(geomToken_));
+  return std::make_unique<TransientTrackBuilder>(iRecord.getHandle(magToken_), iRecord.getHandle(geomToken_));
 }
 
 void TransientTrackBuilderESProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
